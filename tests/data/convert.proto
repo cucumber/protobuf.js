@@ -20,4 +20,6 @@ message Message {
     }
 
     map<string,int64> int64_map = 9;
+
+    int32 int32_val = 10;
 }

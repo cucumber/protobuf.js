@@ -277,6 +277,12 @@ converter.toObject = function toObject(mtype) {
         ("for(var j=0;j<m%s.length;++j){", prop);
             genValuePartial_toObject(gen, field, /* sorted */ index, prop + "[j]")
         ("}");
+        } else if (field.long || field.defaultValue === 0) { gen
+    ("if(m%s!=null&&m%s!=0&&m.hasOwnProperty(%j)){", prop, prop, field.name); // !== undefined && !==0 && !== null
+        genValuePartial_toObject(gen, field, /* sorted */ index, prop);
+        if (field.partOf) gen
+        ("if(o.oneofs)")
+            ("d%s=%j", util.safeProp(field.partOf.name), field.name);
         } else { gen
     ("if(m%s!=null&&m.hasOwnProperty(%j)){", prop, field.name); // !== undefined && !== null
         genValuePartial_toObject(gen, field, /* sorted */ index, prop);

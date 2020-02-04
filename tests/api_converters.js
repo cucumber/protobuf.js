@@ -177,13 +177,23 @@ tape.test("converters", function(test) {
             msg.toJSON();
         });
 
-        test.test('uint64 is ommited in JSON when value is 0', function (test) {
+        test.test('uint64 is omitted in JSON when value is 0', function (test) {
             var obj = {
                 uint64Val: 0,
             }
             var msg = Message.fromObject(obj);
 
-            test.equal(msg.toJSON(), "{}");
+            test.deepEqual(msg.toJSON(), {});
+            test.end();
+        });
+
+        test.test('int32 is omitted in JSON when value is 0', function (test) {
+            var obj = {
+                int32Val: 0,
+            }
+            var msg = Message.fromObject(obj);
+
+            test.deepEqual(msg.toJSON(), {});
             test.end();
         });
 
