@@ -175,26 +175,129 @@ tape.test("converters", function(test) {
                 }
             };
             msg.toJSON();
-        });
 
-        test.test('uint64 is omitted in JSON when value is 0', function (test) {
-            var obj = {
-                uint64Val: 0,
-            }
-            var msg = Message.fromObject(obj);
+            /*
+            Output based on value and options.defaults
 
-            test.deepEqual(msg.toJSON(), {});
-            test.end();
-        });
+            field | value | options.defaults | output         |
+            int32 |       | false            | {}             |
+            int32 | 0     | false            | {}             |
+            int32 | 1     | false            | {"int32": 0}   |
+            int64 |       | false            | {}             |
+            int64 | 0     | false            | {}             |
+            int64 | 1     | false            | {"int64": "0"} |
+            int32 |       | true             | {"int32": 0}   |
+            int32 | 0     | true             | {"int32": 0}   |
+            int32 | 1     | true             | {"int32": 0}   |
+            int64 |       | true             | {"int64": "0"} |
+            int64 | 0     | true             | {"int64": "0"} |
+            int64 | 1     | true             | {"int64": "0"} |
+            */
 
-        test.test('int32 is omitted in JSON when value is 0', function (test) {
-            var obj = {
-                int32Val: 0,
-            }
-            var msg = Message.fromObject(obj);
+            test.test(test.name + 'when options.defaults is false', function (test) {
+                test.test(test.name + 'fields that are not valued are omitted', function (test) {
+                    var obj = {}
+                    var msg = Message.fromObject(obj);
 
-            test.deepEqual(msg.toJSON(), {});
-            test.end();
+                    test.deepEqual(msg.toJSON(), {});
+                    test.end();
+                });
+
+                test.test(test.name + ' fields that are set to default value are omitted', function (test) {
+                    var obj = {
+                        int32Val: 0,
+                        uint64Val: 0
+                    }
+                    var msg = Message.fromObject(obj);
+
+                    test.deepEqual(msg.toJSON(), {});
+                    test.end();
+                });
+
+                test.test(test.name + ' and fields are inialized with a value different from the default one', function (test) {
+                    var obj = {
+                        int32Val: 123,
+                        uint64Val: 456
+                    }
+                    var msg = Message.fromObject(obj);
+
+                    test.test(test.name + ' non-long fields have the number value emitted', function (test) {
+                        test.equal(msg.toJSON().int32Val, 123);
+                        test.end();
+                    })
+
+                    test.test(test.name + ' long fields have the string value emitted', function (test) {
+                        test.equal(msg.toJSON().uint64Val, '456');
+                        test.end();
+                    })
+
+
+                    test.end();
+                });
+
+                test.end();
+            })
+
+            test.test(test.name + ' when options.defaults is true', function (test) {
+                test.test(test.name + ' and fields are not set', function (test) {
+                    var obj = {}
+                    var msg = Message.fromObject(obj);
+
+                    test.test(test.name + ' non-long fields have the default value emitted as a number', function (test) {
+                        test.equal(msg.toJSON().int32Val, 0);
+                        test.end();
+                    })
+
+                    test.test(test.name + ' long fields have the default value emitted as a string', function (test) {
+                        test.equal(msg.toJSON().uint64Val, '0');
+                        test.end();
+                    })
+
+                    test.end();
+                });
+
+                test.test(test.name + ' and fields are set to the default value', function (test) {
+                    var obj = {
+                        int32Val: 0,
+                        uint64Val: 0
+                    }
+                    var msg = Message.fromObject(obj);
+
+                    test.test(test.name + ' non-long fields have their value emitted as a number', function (test) {
+                        test.equal(msg.toJSON().int32Val, 0);
+                        test.end();
+                    })
+
+                    test.test(test.name + ' long fields have their value emitted as a string', function (test) {
+                        test.equal(msg.toJSON().uint64Val, '0');
+                        test.end();
+                    })
+
+                    test.end();
+                });
+
+                test.test(test.name + 'and fields are not set', function (test) {
+                    var obj = {
+                        int32Val: 123,
+                        uint64Val: 456
+                    }
+                    var msg = Message.fromObject(obj);
+
+                    test.test(test.name + ' non-long fields have their value emitted as a number', function (test) {
+                        test.equal(msg.toJSON().int32Val, 123);
+                        test.end();
+                    })
+
+                    test.test(test.name + ' long fields have their value emitted as a string', function (test) {
+                        test.equal(msg.toJSON().uint64Val, '456');
+                        test.end();
+                    })
+
+                    test.end();
+                });
+
+                test.end()
+            });
         });
 
         test.end();
