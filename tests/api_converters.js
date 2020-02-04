@@ -177,7 +177,16 @@ tape.test("converters", function(test) {
             msg.toJSON();
         });
 
+        test.test('uint64 is ommited in JSON when value is 0', function (test) {
+            var obj = {
+                uint64Val: 0,
+            }
+            var msg = Message.fromObject(obj);
+
+            test.equal(msg.toJSON(), "{}");
+            test.end();
+        });
+
         test.end();
     });
-
 });
