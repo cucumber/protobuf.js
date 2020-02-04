@@ -182,16 +182,16 @@ tape.test("converters", function(test) {
             field | value | options.defaults | output         |
             int32 |       | false            | {}             |
             int32 | 0     | false            | {}             |
-            int32 | 1     | false            | {"int32": 0}   |
+            int32 | 1     | false            | {"int32": 1}   |
             int64 |       | false            | {}             |
             int64 | 0     | false            | {}             |
-            int64 | 1     | false            | {"int64": "0"} |
+            int64 | 1     | false            | {"int64": "1"} |
             int32 |       | true             | {"int32": 0}   |
             int32 | 0     | true             | {"int32": 0}   |
-            int32 | 1     | true             | {"int32": 0}   |
+            int32 | 1     | true             | {"int32": 1}   |
             int64 |       | true             | {"int64": "0"} |
             int64 | 0     | true             | {"int64": "0"} |
-            int64 | 1     | true             | {"int64": "0"} |
+            int64 | 1     | true             | {"int64": "1"} |
             */
 
             test.test(test.name + 'when options.defaults is false', function (test) {
